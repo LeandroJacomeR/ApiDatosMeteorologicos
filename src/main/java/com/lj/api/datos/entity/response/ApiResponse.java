@@ -1,9 +1,14 @@
 package com.lj.api.datos.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lj.api.datos.entity.forecast.ApiForecast;
+import com.lj.api.datos.security.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -16,16 +21,16 @@ public class ApiResponse {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Coord coord;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Weather[] weather;
+    @OneToMany(mappedBy = "apiResponse")
+    private List<Weather> weather;
     private String base;
     @OneToOne(cascade = CascadeType.ALL)
     private Main main;
     private int visibility;
     @OneToOne(cascade = CascadeType.ALL)
     private Wind wind;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Clouds clouds;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Clouds clouds;
     private int dt;
     @OneToOne(cascade = CascadeType.ALL)
     private Sys sys;
@@ -34,7 +39,8 @@ public class ApiResponse {
     private String name;
     private int cod;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private ApiForecast apiForecast;
+    private Usuario user;
+
 }

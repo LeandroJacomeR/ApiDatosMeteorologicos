@@ -2,6 +2,7 @@ package com.lj.api.datos.entity.air;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lj.api.datos.entity.response.Coord;
+import com.lj.api.datos.security.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,10 @@ public class ApiAir {
     @OneToOne(cascade = CascadeType.ALL)
     private Coord coord;
 
-    @OneToMany(mappedBy = "apiAir", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apiAir")
     private List<ApiAirList> list;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Usuario user;
 }

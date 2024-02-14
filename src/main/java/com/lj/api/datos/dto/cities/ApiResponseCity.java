@@ -1,4 +1,4 @@
-package com.lj.api.datos.dto.api.cities;
+package com.lj.api.datos.dto.cities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

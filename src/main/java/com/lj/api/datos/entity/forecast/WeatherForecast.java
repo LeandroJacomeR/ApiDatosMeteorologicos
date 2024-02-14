@@ -2,28 +2,23 @@ package com.lj.api.datos.entity.forecast;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lj.api.datos.entity.response.ApiResponse;
-import com.lj.api.datos.security.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
-public class ApiForecast {
+public class WeatherForecast {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "api_id")
+    @Column(name = "weather_id")
     @JsonIgnore
-    private Long id;
-    private String cod;
-    private int message;
-    private int cnt;
-
-    @OneToMany(mappedBy = "apiForecast")
-    private List<ApiResponseForecast> list;
+    private Long weatherId;
+    private int id;
+    private String main;
+    private String description;
+    private String icon;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private Usuario user;
+    private ApiResponseForecast apiResponseForecast;
 }

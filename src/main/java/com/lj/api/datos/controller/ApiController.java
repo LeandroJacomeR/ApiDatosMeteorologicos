@@ -1,6 +1,7 @@
 package com.lj.api.datos.controller;
 
-import com.lj.api.datos.dto.api.forecast.ApiForecastDto;
+import com.lj.api.datos.entity.air.ApiAir;
+import com.lj.api.datos.entity.forecast.ApiForecast;
 import com.lj.api.datos.entity.response.ApiResponse;
 import com.lj.api.datos.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class ApiController {
 
     @GetMapping("/response")
     public ResponseEntity<ApiResponse> apiResponse(double lat, double lon){
-        ApiResponse response = apiService.apiResponse(lat, lon);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        apiResponse = apiService.getApiResponse(lat, lon);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping("/response/{city}")
@@ -31,8 +32,14 @@ public class ApiController {
     }
 
     @GetMapping("/response/forecast/{city}")
-    public ResponseEntity<ApiForecastDto> apiForecastDto(@PathVariable("city") String city){
-        ApiForecastDto apiResponse = apiService.apiResponseDays(city);
+    public ResponseEntity<ApiForecast> apiForecastResponse(@PathVariable("city") String city){
+        ApiForecast apiResponse = apiService.apiResponseDays(city);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/response/air/{city}")
+    public ResponseEntity<ApiAir> apiAirResponse(@PathVariable("city") String city){
+        ApiAir apiAir = apiService.getApiAirResponse(city);
+        return new ResponseEntity<>(apiAir, HttpStatus.OK);
     }
 }

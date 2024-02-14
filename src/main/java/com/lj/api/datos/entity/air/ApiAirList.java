@@ -18,7 +18,7 @@ public class ApiAirList {
     private Components components;
     private int dt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     private ApiAir apiAir;
 }

@@ -14,5 +14,5 @@ public class Clouds {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    private int all;
+    //private int all;
 }

@@ -5,9 +5,11 @@ import com.lj.api.datos.entity.response.ApiResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @Entity
-public class WeatherForecast {
+public class WeatherForecast implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "weather_id")

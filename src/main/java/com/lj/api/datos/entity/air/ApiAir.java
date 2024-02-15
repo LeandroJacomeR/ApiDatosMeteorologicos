@@ -6,11 +6,12 @@ import com.lj.api.datos.security.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
-public class ApiAir {
+public class ApiAir implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_id")

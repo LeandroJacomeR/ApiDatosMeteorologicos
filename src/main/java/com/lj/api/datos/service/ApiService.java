@@ -13,9 +13,16 @@ import com.lj.api.datos.repository.forecast.ApiForecastRepository;
 import com.lj.api.datos.repository.forecast.ApiResponseForecastRepository;
 import com.lj.api.datos.repository.response.ApiResponseRepository;
 import com.lj.api.datos.repository.response.WeatherRepository;
+import com.lj.api.datos.security.entity.Usuario;
+import com.lj.api.datos.security.repository.UsuarioRepository;
+import com.lj.api.datos.security.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -46,8 +53,10 @@ public class ApiService {
     private ApiAirListRepository apiAirListRepository;
     @Autowired
     private WeatherRepository weatherRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
-    @Cacheable("addresses")
+    @Cacheable(value = "api_cache")
     public ApiResponse apiResponseCity(String city){
         List<ApiResponseCity> responseCities = cities(city);
         ApiResponseCity cityDat = responseCities.get(0);
@@ -56,7 +65,7 @@ public class ApiService {
         return getApiResponse(lat, lon);
     }
 
-    @Cacheable("addresses")
+    @Cacheable(value = "api_cache")
     public ApiForecast apiResponseDays(String city){
         List<ApiResponseCity> responseCities = cities(city);
         ApiResponseCity cityDat = responseCities.get(0);
@@ -65,7 +74,7 @@ public class ApiService {
         return getForecastDays(lat, lon);
     }
 
-    @Cacheable("addresses")
+    @Cacheable(value = "api_cache")
     public ApiAir getApiAirResponse(String city){
         List<ApiResponseCity> responseCities = cities(city);
         ApiResponseCity cityDat = responseCities.get(0);
@@ -83,6 +92,10 @@ public class ApiService {
     @Transactional
     public ApiResponse getApiResponse(double lat, double lon){
         ApiResponse apiResponse = restTemplate.getForObject(url + "data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, ApiResponse.class);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        Usuario user = usuarioService.getByNombreUsuario(username).get();
+        apiResponse.setUser(user);
         apiResponse = apiResponseRepository.save(apiResponse);
 
         for (Weather w:  apiResponse.getWeather()) {
@@ -95,6 +108,10 @@ public class ApiService {
     @Transactional
     public ApiForecast getForecastDays(double lat, double lon){
         ApiForecast apiForecast = restTemplate.getForObject(url + "data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, ApiForecast.class);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        Usuario user = usuarioService.getByNombreUsuario(username).get();
+        apiForecast.setUser(user);
         apiForecast = apiForecastRepository.save(apiForecast);
 
         for (ApiResponseForecast f : apiForecast.getList()){
@@ -107,6 +124,10 @@ public class ApiService {
     @Transactional
     public ApiAir getApiAir(double lat, double lon){
         ApiAir apiAirResponse = restTemplate.getForObject(urlApi + "data/2.5/air_pollution?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey, ApiAir.class);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        Usuario user = usuarioService.getByNombreUsuario(username).get();
+        apiAirResponse.setUser(user);
         apiAirResponse = apiAirRepository.save(apiAirResponse);
 
         for (ApiAirList a: apiAirResponse.getList()){

@@ -9,21 +9,21 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
-@Configuration
-@EnableCaching
+//@Configuration
+//@EnableCaching
 public class CaffeineCacheConfig {
-
-    @Bean
-    public Caffeine caffeine(){
-        return Caffeine.newBuilder()
-                .expireAfterAccess(60, TimeUnit.MINUTES);
-    }
-
-    @Bean
-    public CacheManager cacheManager(Caffeine caffeine){
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-        caffeineCacheManager.getCache("addresses");
-        caffeineCacheManager.setCaffeine(caffeine);
-        return caffeineCacheManager;
-    }
+//
+//    @Bean
+//    public Caffeine caffeine(){
+//        return Caffeine.newBuilder()
+//                .expireAfterAccess(60, TimeUnit.MINUTES);
+//    }
+//
+//    @Bean
+//    public CacheManager cacheManager(Caffeine caffeine){
+//        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
+//        caffeineCacheManager.getCache("addresses");
+//        caffeineCacheManager.setCaffeine(caffeine);
+//        return caffeineCacheManager;
+//    }
 }

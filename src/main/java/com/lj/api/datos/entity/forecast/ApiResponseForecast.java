@@ -5,11 +5,12 @@ import com.lj.api.datos.entity.response.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
-public class ApiResponseForecast {
+public class ApiResponseForecast implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_id")
@@ -20,9 +21,8 @@ public class ApiResponseForecast {
     @OneToOne(cascade = CascadeType.ALL)
     private MainForecast main;
     @OneToMany(mappedBy = "apiResponseForecast")
+    @JsonIgnore
     private List<WeatherForecast> weather;
-    //    @OneToOne(cascade = CascadeType.ALL)
-//    private Clouds clouds;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private WindForecast wind;
